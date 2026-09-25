@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"os"
 )
 
@@ -23,7 +22,7 @@ func loadRecipients(filePath string, ch chan Recipient) error {
 	}
 
 	for _, record := range records[1:] { //  do not need to assume the number of column  index  0is the head title
-		fmt.Println(record)
+		//fmt.Println(record)
 		// send --> consumer ---. channel
 		ch <- Recipient{
 			Name:  record[0],
