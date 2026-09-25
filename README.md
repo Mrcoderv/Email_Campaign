@@ -68,13 +68,7 @@ runner.
 
 ## Code map
 
-```text
-Email_Campaign/
-├── main.go          # Application entry point and campaign startup
-├── config/           # Campaign and email delivery configuration
-├── templates/        # Reusable email content and layouts
-└── README.md         # Project documentation
-```
+
 
 ### Request flow
 
