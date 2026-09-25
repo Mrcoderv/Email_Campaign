@@ -34,6 +34,17 @@ The application reads the configured recipients and message details, renders
 the selected template, and sends the campaign concurrently. Review the output
 for send status and errors.
 
+To run a local Mailpit SMTP server and web interface:
+
+```bash
+docker run -d \
+	--restart unless-stopped \
+	--name=mailpit \
+	-p 8025:8025 \
+	-p 1025:1025 \
+	axllent/mailpit
+```
+
 ## Features
 
 ### Concurrent delivery
