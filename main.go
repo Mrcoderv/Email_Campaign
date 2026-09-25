@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"time"
+	"html/template"
+	"sync"
 )
 
 type Recipient struct {
@@ -21,18 +23,35 @@ func main() {
 	// loadRecipients("./Emails.csv", recipientChannel)
 	// emailworker(1,recipientChannel)
 	// so we need to run both at the same time .using the go routine , concurently
-	go func() {
+	go func() { // producer
 		loadRecipients("./Emails.csv", recipientChannel)
 	}()
 	// or
+	var wg sync.WaitGroup
 	workerCount := 5
 	for i := 1; i <= workerCount; i++ {
-		go emailworker(i, recipientChannel)
+		wg.Add(1)
+		go emailworker(i, recipientChannel, &wg) //  calling consumer file functiom
+	}
+	//time.Sleep(3 * time.Second) // to make the wait the main proggram for the finishing the go routine task
+	//   this is not the best method
+
+	wg.Wait()
+}
+func exeTemplate(r Recipient) (string, error) {
+	temp, err := template.ParseFiles("email.tmpl")
+
+	if err != nil {
+		return "", err
+
+	}
+	var tpl bytes.Buffer        //  buffer to store the output of the template.. execution
+	err = temp.Execute(&tpl, r) // this execute the template and write the output to the buffer tpl
+	if err != nil {
+		return "", err
+
 	}
 
-	go emailworker(1, recipientChannel)
-	time.Sleep(3 * time.Second) // to make the wait the main proggram for the finishing the go routine task
-	//   this is not the best method 
+	return tpl.String(), nil //
 
-	fmt.Println("welcome to email sender")
 }

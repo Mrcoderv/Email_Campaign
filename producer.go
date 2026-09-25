@@ -5,7 +5,9 @@ import (
 	"os"
 )
 
-func loadRecipients(filePath string, ch chan Recipient) error {
+func loadRecipients(filePath string, ch chan Recipient) error {  
+	defer close(ch)
+
 	file, e := os.Open(filePath)
 	if e != nil {
 		return e
